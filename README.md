@@ -60,4 +60,4 @@ manifest.json          # Configuration blueprint
 
 ## 📜 License
 
-MIT License. Feel free to fork and modify for your own productivity needs.
+ Feel free to fork and modify for your own productivity needs.
