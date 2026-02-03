@@ -1,0 +1,28 @@
+{
+    "manifest_version": 3,
+    "name": "Discipline - Conscious Friction",
+    "version": "1.0.0",
+    "description": "Stops mindless scrolling by adding conscious friction.",
+    "permissions": [
+        "tabs",
+        "storage",
+        "alarms",
+        "webNavigation"
+    ],
+    "host_permissions": [
+        "*://www.instagram.com/*",
+        "*://www.youtube.com/*"
+    ],
+    "background": {
+        "service_worker": "src/background.js"
+    },
+    "action": {
+        "default_popup": "src/options/index.html"
+    },
+    "options_page": "src/options/index.html",
+    "icons": {
+        "16": "src/icons/icon16.png",
+        "48": "src/icons/icon48.png",
+        "128": "src/icons/icon128.png"
+    }
+}

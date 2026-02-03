@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conscious Pause</title>
+    <!-- Linking our styling -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <!-- The Main "Glass" Card -->
+    <main class="glass-container" id="main-container">
+        <!-- Stage 1: The Question -->
+        <section id="stage-reflection" class="stage active">
+            <h1 class="fade-in">Is this essential?</h1>
+            <p class="subtitle fade-in-delay">You've opened this app <span id="usage-count">0</span> times today.</p>
+            
+            <div class="actions">
+                <button id="btn-close" class="btn primary">No, Close Tab</button>
+                <button id="btn-proceed" class="btn secondary">Yes, I have a purpose</button>
+            </div>
+        </section>
+
+        <!-- Stage 2: The Friction (Typing Challenge) -->
+        <section id="stage-challenge" class="stage hidden">
+            <h2>Intention Check</h2>
+            <p>Type the following phrase to proceed:</p>
+            <div class="quote-box">
+                <span id="target-phrase">I am choosing to spend my time wisely.</span>
+            </div>
+            
+            <input type="text" id="input-phrase" placeholder="Type here..." autocomplete="off">
+            <div id="error-msg" class="error hidden">That doesn't match. Focus.</div>
+        </section>
+
+        <!-- Stage 3: The Boredom Protocol (Depletion Mode) -->
+        <section id="stage-boredom" class="stage hidden">
+            <div class="boredom-container">
+                <h2>Wait for it...</h2>
+                <div class="timer" id="boredom-timer">30</div>
+                <p>Don't switch tabs.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>
