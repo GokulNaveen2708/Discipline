@@ -155,7 +155,9 @@ async function loadStats() {
 
     sorted.forEach(([site, count]) => {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${site}</span> <strong>${count}</strong>`;
+        // Clean display even if old data exists
+        const cleanName = site.replace(/^www\./, '');
+        li.innerHTML = `<span>${cleanName}</span> <strong>${count}</strong>`;
         statsList.appendChild(li);
     });
 }

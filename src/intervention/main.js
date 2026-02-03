@@ -33,12 +33,18 @@ async function init() {
 
     // -- USAGE TRACKING DISPLAY --
     const counts = storage.visitCounts || {};
-    let hostname = '';
-    try {
-        hostname = new URL(targetUrl).hostname;
-    } catch (e) { hostname = 'this site'; }
+    let count = 0;
 
-    const count = counts[hostname] || 0;
+    // Fuzzy Lookup: Find ANY key in counts that matches the current URL
+    // This solves the 'www' vs 'non-www' vs 'subdomain' mismatch forever.
+    const cleanKeys = Object.keys(counts);
+    for (const key of cleanKeys) {
+        if (targetUrl.includes(key)) {
+            count = counts[key];
+            console.log(`Matched usage count for ${key}: ${count}`);
+            break;
+        }
+    }
     const countEl = document.getElementById('usage-count');
     if (countEl) countEl.innerText = count;
 

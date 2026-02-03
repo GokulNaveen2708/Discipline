@@ -36,14 +36,15 @@ async function checkUrl(tabId, url) {
 
     // -- USAGE TRACKING LOGIC --
     try {
-        const hostname = new URL(url).hostname;
+        // Normalize hostname: remove 'www.' so 'instagram.com' and 'www.instagram.com' count as same
+        const hostname = new URL(url).hostname.replace(/^www\./, '');
         const storageData = await chrome.storage.local.get(['visitCounts']);
         const visitCounts = storageData.visitCounts || {};
         const currentCount = (visitCounts[hostname] || 0) + 1;
         visitCounts[hostname] = currentCount;
 
-        // Save asynchronously
-        chrome.storage.local.set({ visitCounts: visitCounts });
+        // Save synchronously (await) to ensure it persists before redirect
+        await chrome.storage.local.set({ visitCounts: visitCounts });
     } catch (e) {
         console.error("Tracking error:", e);
     }
