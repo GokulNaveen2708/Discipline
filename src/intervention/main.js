@@ -23,11 +23,32 @@ async function init() {
     targetUrl = params.get('target');
 
     // Load Settings
-    const storage = await mockableStorageGet(['frictionMode']);
+    const storage = await mockableStorageGet(['frictionMode', 'visitCounts', 'unlockDurationMinutes']);
     frictionMode = storage.frictionMode || 'normal';
+
+    // Set dynamic duration
+    const minutes = storage.unlockDurationMinutes || 10;
+    unlockDuration = minutes * 60 * 1000;
+
+
+    // -- USAGE TRACKING DISPLAY --
+    const counts = storage.visitCounts || {};
+    let hostname = '';
+    try {
+        hostname = new URL(targetUrl).hostname;
+    } catch (e) { hostname = 'this site'; }
+
+    const count = counts[hostname] || 0;
+    const countEl = document.getElementById('usage-count');
+    if (countEl) countEl.innerText = count;
 
     setupListeners();
 }
+
+// 1. Elements
+const confirmationModal = document.getElementById('confirmation-modal');
+const btnConfirmYes = document.getElementById('btn-confirm-yes');
+const btnConfirmNo = document.getElementById('btn-confirm-no');
 
 function setupListeners() {
     btnClose.addEventListener('click', () => {
@@ -47,6 +68,29 @@ function setupListeners() {
     inputPhrase.addEventListener('input', (e) => {
         checkInput(e.target.value);
     });
+
+    // -- MODAL LISTENERS --
+    btnConfirmYes.addEventListener('click', () => {
+        grantAccess();
+    });
+
+    btnConfirmNo.addEventListener('click', () => {
+        window.close();
+    });
+}
+
+function checkInput(text) {
+    const requiredPhrase = targetPhraseEl.innerText;
+
+    if (text === requiredPhrase) {
+        inputPhrase.style.borderColor = '#4CAF50';
+        inputPhrase.disabled = true;
+
+        // Show the Conscious Confirmation Modal instead of immediate grant
+        confirmationModal.classList.remove('hidden');
+    } else {
+        inputPhrase.style.borderColor = '#333';
+    }
 }
 
 function startBoredomProtocol() {
@@ -88,17 +132,7 @@ function showStage(stageElement) {
     stageElement.classList.add('active');
 }
 
-function checkInput(text) {
-    const requiredPhrase = targetPhraseEl.innerText;
 
-    if (text === requiredPhrase) {
-        inputPhrase.style.borderColor = '#4CAF50';
-        inputPhrase.disabled = true;
-        grantAccess();
-    } else {
-        inputPhrase.style.borderColor = '#333';
-    }
-}
 
 async function grantAccess() {
     const now = Date.now();
@@ -144,3 +178,60 @@ if (typeof chrome === 'undefined' || !chrome.runtime) {
 
 // Run the script
 init();
+
+// --- Zooming Quotes Animation ---
+const QUOTES = [
+    // Motivational
+    "Focus", "Is this urgent?", "Create, don't consume", "Breathe",
+    "Time is currency", "Do the hard work", "Stay conscious", "You are in control",
+    "Why are you here?", "Discipline equals freedom", "Scroll less, live more",
+    "Deep work", "Be present", "Don't be a zombie", "What is your goal?", "Legacy over likes",
+
+    // Aggressive / "Mean"
+    "You are wasting your life", "Stop being average", "Nobody cares about your excuses",
+    "Get back to work", "This is why you fail", "Comfort is a trap", "Do you want to be a loser?",
+    "Tick tock, time is running out", "Mediocrity loves company", "Stop seeking validation",
+    "Your competition is working", "Sleep when you're dead", "Pain is temporary",
+    "Don't be pathetic", "Stop whining", "Execution over excuses", "Hungry dogs run faster",
+    "Be a warrior, not a worrier", "Suffer the pain of discipline", "Or suffer the pain of regret",
+    "You are capable of more", "Don't disappoint your future self", "Quit slackin'",
+    "Focus or fail", "Cheap dopamine is killing you", "Be better"
+];
+
+function initFallingQuotes() {
+    // Spawn frequently
+    setInterval(spawnQuote, 2000);
+    spawnQuote();
+}
+
+function spawnQuote() {
+    const text = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+    const el = document.createElement('div');
+    el.classList.add('falling-text');
+    el.innerText = text;
+
+    // Randomize 2D position (since we are zooming from back)
+    const left = Math.random() * 90; // 0-90% width
+    const top = Math.random() * 90;  // 0-90% height
+
+    const duration = 10 + Math.random() * 10; // 10s to 20s
+    const size = 0.8 + Math.random() * 1.0; // Random size
+
+    el.style.left = `${left}%`;
+    el.style.top = `${top}%`;
+    el.style.animationDuration = `${duration}s`;
+    el.style.fontSize = `${size}rem`;
+
+    // Random delay to desync
+    el.style.animationDelay = `${Math.random() * 5}s`;
+
+    document.body.appendChild(el);
+
+    // Cleanup
+    setTimeout(() => {
+        el.remove();
+    }, (duration + 5) * 1000);
+}
+
+// Start animation
+initFallingQuotes();

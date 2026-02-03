@@ -1,7 +1,7 @@
 // background.js - The "Security Guard" of the extension
 
 // 1. configuration
-const DEFAULT_BLOCKED = ["instagram.com", "youtube.com"];
+const DEFAULT_BLOCKED = ["instagram.com", "youtube.com", "twitter.com"];
 const INTERVENTION_PAGE = "src/intervention/index.html";
 
 // 2. The Check Function
@@ -33,6 +33,21 @@ async function checkUrl(tabId, url) {
     }
 
     // 6. If no pass, REDIRECT to the police station (Intervention Page)
+
+    // -- USAGE TRACKING LOGIC --
+    try {
+        const hostname = new URL(url).hostname;
+        const storageData = await chrome.storage.local.get(['visitCounts']);
+        const visitCounts = storageData.visitCounts || {};
+        const currentCount = (visitCounts[hostname] || 0) + 1;
+        visitCounts[hostname] = currentCount;
+
+        // Save asynchronously
+        chrome.storage.local.set({ visitCounts: visitCounts });
+    } catch (e) {
+        console.error("Tracking error:", e);
+    }
+
     const interventionUrl = chrome.runtime.getURL(INTERVENTION_PAGE);
 
     // Prevent infinite update loops: if we are already on the intervention page, stop.

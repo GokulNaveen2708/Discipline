@@ -12,9 +12,9 @@
     <div class="sidebar">
         <h2>Discipline</h2>
         <nav>
-            <a href="#" class="active">General</a>
-            <a href="#">Stats</a>
-            <a href="#">About</a>
+            <a href="#" class="active" data-tab="section-general">General</a>
+            <a href="#" data-tab="section-stats">Stats</a>
+            <a href="#" data-tab="section-about">About</a>
         </nav>
     </div>
 
@@ -24,50 +24,97 @@
             <p>Define your boundaries.</p>
         </header>
 
-        <!-- Blocked Sites Section -->
-        <section class="card">
-            <h3>Blocked Sites</h3>
-            <p class="description">Add the domains you want to add friction to.</p>
+        <!-- GENERAL SECTION -->
+        <div id="section-general" class="tab-content">
+            <!-- Blocked Sites Section -->
+            <section class="card">
+                <h3>Blocked Sites</h3>
+                <p class="description">Add the domains you want to add friction to.</p>
 
-            <div class="input-group">
-                <input type="text" id="new-site" placeholder="e.g. twitter.com">
-                <button id="btn-add" class="btn primary">Add</button>
+                <div class="input-group">
+                    <input type="text" id="new-site" placeholder="e.g. twitter.com">
+                    <button id="btn-add" class="btn primary">Add</button>
+                </div>
+
+                <ul id="site-list" class="site-list">
+                    <!-- Javascript will populate this -->
+                </ul>
+            </section>
+
+            <!-- Difficulty Section -->
+            <section class="card">
+                <h3>Friction Level</h3>
+                <div class="option-group">
+                    <label class="radio-card">
+                        <input type="radio" name="mode" value="normal" checked>
+                        <div class="card-content">
+                            <span class="title">Conscious Pause</span>
+                            <span class="desc">Type a phrase to unlock. Good for mindfulness.</span>
+                        </div>
+                    </label>
+
+                    <label class="radio-card">
+                        <input type="radio" name="mode" value="depletion">
+                        <div class="card-content">
+                            <span class="title">Depletion Mode</span>
+                            <span class="desc">Friction gets harder (30s -> 60s wait) every time you unlock.</span>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Duration Section -->
+            <section class="card">
+                <h3>Unlock Duration</h3>
+                <p class="description">How long should the site stay unlocked? (<span id="duration-value">10</span> min)
+                </p>
+
+                <div class="input-group">
+                    <input type="range" id="duration-slider" min="1" max="60" value="10" step="1" style="width: 100%;">
+                </div>
+            </section>
+
+            <div class="footer">
+                <button id="btn-save" class="btn save">Save Changes</button>
+                <span id="status-msg" class="status hidden">Saved!</span>
             </div>
-
-            <ul id="site-list" class="site-list">
-                <!-- Javascript will populate this -->
-            </ul>
-        </section>
-
-        <!-- Difficulty Section -->
-        <section class="card">
-            <h3>Friction Level</h3>
-            <div class="option-group">
-                <label class="radio-card">
-                    <input type="radio" name="mode" value="normal" checked>
-                    <div class="card-content">
-                        <span class="title">Conscious Pause</span>
-                        <span class="desc">Type a phrase to unlock. Good for mindfulness.</span>
-                    </div>
-                </label>
-
-                <label class="radio-card">
-                    <input type="radio" name="mode" value="depletion">
-                    <div class="card-content">
-                        <span class="title">Depletion Mode</span>
-                        <span class="desc">Friction gets harder (30s -> 60s wait) every time you unlock.</span>
-                    </div>
-                </label>
-            </div>
-        </section>
-
-        <div class="footer">
-            <button id="btn-save" class="btn save">Save Changes</button>
-            <span id="status-msg" class="status hidden">Saved!</span>
         </div>
+
+        <!-- STATS SECTION -->
+        <div id="section-stats" class="tab-content hidden">
+            <section class="card">
+                <h3>Usage Statistics</h3>
+                <p class="description">Your discipline journey in numbers.</p>
+                <ul id="stats-list" class="site-list">
+                    <!-- JS Populated -->
+                    <li><span>Loading...</span></li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- ABOUT SECTION -->
+        <div id="section-about" class="tab-content hidden">
+            <section class="card">
+                <h3>About Discipline</h3>
+                <p class="description">v1.1.0 • Built with Agentic AI</p>
+                <div style="line-height: 1.6; color: #ccc;">
+                    <p>Discipline is designed to break the subconscious loop of opening distracting apps.</p>
+                    <br>
+                    <p><strong>Features:</strong></p>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li>Conscious Confirmation Popup</li>
+                        <li>Depletion Mode (Escalating Friction)</li>
+                        <li>Neon Zoom Motivation</li>
+                        <li>Usage Tracking</li>
+                    </ul>
+                    <p>Stay focused. You are in control.</p>
+                </div>
+            </section>
+        </div>
+
     </main>
 
-    <script src="main.js"></script>
+    <script src="options.js"></script>
 </body>
 
 </html>
